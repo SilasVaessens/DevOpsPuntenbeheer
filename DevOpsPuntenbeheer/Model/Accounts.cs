@@ -7,5 +7,7 @@ namespace DevOpsPuntenbeheer.Model
 {
     public class Accounts
     {
+        public int AccountID { get; set; }
+        public int WalletID { get; set; }
     }
 }
