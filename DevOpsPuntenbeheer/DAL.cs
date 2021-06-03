@@ -13,17 +13,16 @@ namespace DevOpsPuntenbeheer
 
         public void AddAccount(int AccountID, int WalletID)
         {
-            SqlConnection connection = new SqlConnection(connString);
-            string query = "INSERT INTO Accounts (AccountID, WalletID) VALUES (@AccountID, @WalletID)";
-            SqlCommand command = new SqlCommand(query, connection);
-
-            command.Parameters.AddWithValue("@AccountID", AccountID);
-            command.Parameters.AddWithValue("@WalletID", WalletID);
-
+            using SqlConnection conn = new SqlConnection(connString);
+            using SqlCommand cmd = new SqlCommand(connString);
+            cmd.Connection = conn;
+            cmd.CommandText = "INSERT INTO Accounts (AccountID, WalletID) VALUES (@AccountID, @WalletID)";
+            cmd.Parameters.AddWithValue("@AccountID", AccountID);
+            cmd.Parameters.AddWithValue("@WalletID", WalletID);
             try
             {
-                connection.Open();
-                command.ExecuteNonQuery();
+                conn.Open();
+                cmd.ExecuteNonQuery();
                 Console.WriteLine("Records Inserted Successfully");
             }
             catch (SqlException e)
@@ -32,22 +31,22 @@ namespace DevOpsPuntenbeheer
             }
             finally
             {
-                connection.Close();
+                conn.Close();
             }
+
         }
 
         public void AddWallet()
         {
-            SqlConnection connection = new SqlConnection(connString);
-            string query = "INSERT INTO Wallets (WalletPoints) VALUES (@WalletPoints)";
-            SqlCommand command = new SqlCommand(query, connection);
-
-            command.Parameters.AddWithValue("@WalletPoints", 0);
-
+            using SqlConnection conn = new SqlConnection(connString);
+            using SqlCommand cmd = new SqlCommand(connString);
+            cmd.Connection = conn;
+            cmd.CommandText = "INSERT INTO Wallets (WalletPoints) VALUES (@WalletPoints)";
+            cmd.Parameters.AddWithValue("@WalletPoints", 0);
             try
             {
-                connection.Open();
-                command.ExecuteNonQuery();
+                conn.Open();
+                cmd.ExecuteNonQuery();
                 Console.WriteLine("Records Inserted Successfully");
             }
             catch (SqlException e)
@@ -56,9 +55,36 @@ namespace DevOpsPuntenbeheer
             }
             finally
             {
-                connection.Close();
+                conn.Close();
             }
+        }
 
+        public int GetWalletID(int WalletID)
+        {
+            using SqlConnection conn = new SqlConnection(connString);
+            using SqlCommand cmd = new SqlCommand(connString);
+            cmd.Connection = conn;
+            cmd.CommandText = "SELECT * FROM Wallets WHERE WalletID=(SELECT max(WalletID) FROM Wallets)";
+            try
+            {
+                conn.Open();
+                using SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    int Wallet = (int)reader["WalletID"];
+                    WalletID = Wallet;
+                }
+            }
+            catch (SqlException e)
+            {
+
+                Console.WriteLine("Error Generated. Details: " + e.ToString());
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return WalletID;
         }
     }
 }

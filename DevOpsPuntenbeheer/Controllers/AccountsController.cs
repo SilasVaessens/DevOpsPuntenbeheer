@@ -11,13 +11,12 @@ namespace DevOpsPuntenbeheer.Controllers
     [Route("[controller]")]
     public class AccountsController : Controller
     {
-        private static List<Accounts> accounts1 = new List<Accounts>();
 
         [HttpPost]
         public IActionResult AddAccount (Accounts accounts)
         {
-            accounts1.Add(accounts);
-            return Ok(accounts1);
+            accounts.AddAccounts(accounts);
+            return Ok();
         }
     }
 }
