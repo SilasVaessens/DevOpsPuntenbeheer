@@ -1,0 +1,33 @@
+name: .NET
+
+on:
+  push:
+    branches: 
+      - Feature_Silas
+      - Feature_Bas
+      - master
+  workflow_dispatch:
+    
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.301
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build with dotnet
+      working-directory: ./DevOpsPuntenbeheer   
+      run: dotnet build --configuration Release
+      
+    - name: Run tests
+      working-directory: ./TestsPuntenbeheer
+      run: dotnet test 
