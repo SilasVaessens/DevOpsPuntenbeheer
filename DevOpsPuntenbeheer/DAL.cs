@@ -24,6 +24,7 @@ namespace DevOpsPuntenbeheer
                 conn.Open();
                 cmd.ExecuteNonQuery();
                 Console.WriteLine("Account Inserted Successfully");
+
             }
             catch (SqlException e)
             {
@@ -48,6 +49,7 @@ namespace DevOpsPuntenbeheer
                 conn.Open();
                 cmd.ExecuteNonQuery();
                 Console.WriteLine("Wallet Inserted Successfully");
+
             }
             catch (SqlException e)
             {
@@ -58,6 +60,7 @@ namespace DevOpsPuntenbeheer
                 conn.Close();
             }
         }
+
 
         public int GetLastWalletID(int WalletID)
         {
@@ -86,6 +89,7 @@ namespace DevOpsPuntenbeheer
             }
             return WalletID;
         }
+
 
         public int GetWalletID(int AccountID)
         {

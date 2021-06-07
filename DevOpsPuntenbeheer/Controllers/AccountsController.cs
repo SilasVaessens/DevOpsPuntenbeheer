@@ -26,5 +26,6 @@ namespace DevOpsPuntenbeheer.Controllers
             accounts.DeleteAccounts(AccountID);
             return Ok();
         }
+
     }
 }

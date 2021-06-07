@@ -21,6 +21,7 @@ namespace DevOpsPuntenbeheer.Model
         public void AddAccounts(Accounts accounts)
         {
             Dal.AddWallet();
+
             int wallet = Dal.GetLastWalletID(0);
             Dal.AddAccount(accounts.AccountID, wallet);
         }
@@ -31,5 +32,6 @@ namespace DevOpsPuntenbeheer.Model
             Dal.DeleteWallet(wallet);
             Dal.DeleteAccount(AccountID);
         }
+
     }
 }
