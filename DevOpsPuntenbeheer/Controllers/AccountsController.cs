@@ -18,5 +18,14 @@ namespace DevOpsPuntenbeheer.Controllers
             accounts.AddAccounts(accounts);
             return Ok();
         }
+
+        [HttpDelete("{AccountID}")]
+        public IActionResult DeleteAccount (int AccountID)
+        {
+            Accounts accounts = new Accounts(0, 0);
+            accounts.DeleteAccounts(AccountID);
+            return Ok();
+        }
+
     }
 }

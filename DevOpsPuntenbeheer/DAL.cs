@@ -23,7 +23,8 @@ namespace DevOpsPuntenbeheer
             {
                 conn.Open();
                 cmd.ExecuteNonQuery();
-                Console.WriteLine("Records Inserted Successfully");
+                Console.WriteLine("Account Inserted Successfully");
+
             }
             catch (SqlException e)
             {
@@ -47,7 +48,8 @@ namespace DevOpsPuntenbeheer
             {
                 conn.Open();
                 cmd.ExecuteNonQuery();
-                Console.WriteLine("Records Inserted Successfully");
+                Console.WriteLine("Wallet Inserted Successfully");
+
             }
             catch (SqlException e)
             {
@@ -59,7 +61,8 @@ namespace DevOpsPuntenbeheer
             }
         }
 
-        public int GetWalletID(int WalletID)
+
+        public int GetLastWalletID(int WalletID)
         {
             using SqlConnection conn = new SqlConnection(connString);
             using SqlCommand cmd = new SqlCommand(connString);
@@ -85,6 +88,81 @@ namespace DevOpsPuntenbeheer
                 conn.Close();
             }
             return WalletID;
+        }
+
+
+        public int GetWalletID(int AccountID)
+        {
+            int WalletID = new int();
+            using SqlConnection conn = new SqlConnection(connString);
+            using SqlCommand cmd = new SqlCommand(connString);
+            cmd.Connection = conn;
+            cmd.CommandText = "SELECT * FROM Accounts WHERE AccountID = @AccountID";
+            cmd.Parameters.AddWithValue("@AccountID", AccountID);
+            try
+            {
+                conn.Open();
+                using SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    WalletID = (int)reader["WalletID"];
+                }
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine("Error Generated. Details: " + e.ToString());
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return WalletID;
+        }
+
+        public void DeleteWallet(int WalletID)
+        {
+            using SqlConnection conn = new SqlConnection(connString);
+            using SqlCommand cmd = new SqlCommand(connString);
+            cmd.Connection = conn;
+            cmd.CommandText = "DELETE FROM Wallets WHERE WalletID = @WalletID";
+            cmd.Parameters.AddWithValue("@WalletID", WalletID);
+            try
+            {
+                conn.Open();
+                cmd.ExecuteNonQuery();
+                Console.WriteLine("Wallet Deleted Successfully");
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine("Error Generated. Details: " + e.ToString());
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        public void DeleteAccount(int AccountID)
+        {
+            using SqlConnection conn = new SqlConnection(connString);
+            using SqlCommand cmd = new SqlCommand(connString);
+            cmd.Connection = conn;
+            cmd.CommandText = "DELETE FROM Accounts WHERE AccountID = @AccountID";
+            cmd.Parameters.AddWithValue("@AccountID", AccountID);
+            try
+            {
+                conn.Open();
+                cmd.ExecuteNonQuery();
+                Console.WriteLine("Account Deleted Succesfully");
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine("Error Generated. Details: " + e.ToString());
+            }
+            finally
+            {
+                conn.Close();
+            }
         }
     }
 }
