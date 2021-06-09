@@ -9,7 +9,7 @@ namespace DevOpsPuntenbeheer.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class HurenController : Controller
+    public class HurenController : ControllerBase
     {
         private static List<int> test = new List<int>();
 
