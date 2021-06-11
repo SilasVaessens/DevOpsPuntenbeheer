@@ -11,13 +11,13 @@ namespace DevOpsPuntenbeheer.Controllers
     [Route("[controller]")]
     public class AccountsController : ControllerBase
     {
-        //demo
+        
 
         [HttpPost]
         public IActionResult AddAccount (Accounts accounts)
         {
-            //accounts.AddAccounts(accounts);
-            return Ok(accounts);
+            accounts.AddAccounts(accounts);
+            return Ok();
         }
 
         [HttpDelete("{AccountID}")]
