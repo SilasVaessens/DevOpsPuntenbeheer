@@ -1,3 +1,4 @@
+using DevOpsPuntenbeheer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TestsPuntenbeheer
