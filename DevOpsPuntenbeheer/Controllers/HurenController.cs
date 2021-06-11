@@ -11,13 +11,6 @@ namespace DevOpsPuntenbeheer.Controllers
     [Route("[controller]")]
     public class HurenController : ControllerBase
     {
-        private static List<int> test = new List<int>();
-
-        public IActionResult Get()
-        {
-            test.Add(1);
-            return Ok(test);
-        }
 
     }
 }

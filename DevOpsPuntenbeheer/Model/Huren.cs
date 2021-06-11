@@ -7,8 +7,23 @@ namespace DevOpsPuntenbeheer.Model
 {
     public class Huren
     {
-        public int ID { get; set; }
-        public string Woord { get; set; } = "Test";
+        public int AccountID { get; set; }
+        public int Points { get; set; }
 
+        public bool PointSubtract(int AccountID, int subtract)
+        {
+            int walletID = DAL.GetWalletID(AccountID);
+            int walletpoints = DAL.GetWalletPoints(walletID);
+
+            if(subtract > walletpoints)
+            {
+                return false;
+            }
+            else
+            {
+                DAL.SubtractWalletPoints(walletID, subtract);
+                return true;
+            }
+        }
     }
 }
