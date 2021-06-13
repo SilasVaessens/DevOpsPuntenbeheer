@@ -4,10 +4,12 @@ on:
   push:
     branches: 
       - Feature_Silas
-      - Feature_Bas
+      - local_bas
+  pull_request:
+    branches:
       - master
   workflow_dispatch:
-    
+ 
 jobs:
   build:
 
