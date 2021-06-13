@@ -1,10 +1,6 @@
 name: Testing
 
 on:
-  push:
-    branches: 
-      - Feature_Silas
-      - local_bas
   pull_request:
     branches:
       - master
