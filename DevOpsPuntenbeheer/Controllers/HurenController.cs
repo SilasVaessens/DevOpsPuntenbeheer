@@ -11,13 +11,19 @@ namespace DevOpsPuntenbeheer.Controllers
     [Route("[controller]")]
     public class HurenController : ControllerBase
     {
-        private static List<int> test = new List<int>();
-
-        public IActionResult Get()
+        [HttpPut("{AccountID}")]
+        public IActionResult PointSubtract(Huren subtract)
         {
-            test.Add(1);
-            return Ok(test);
+            bool Allowed = subtract.PointSubtract(subtract.AccountID, subtract.Points);
+            if (Allowed)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+          
         }
-
     }
 }

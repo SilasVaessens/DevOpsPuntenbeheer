@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DevOpsPuntenbeheer.Model;
 
 namespace DevOpsPuntenbeheer.Controllers
 {
@@ -10,5 +11,12 @@ namespace DevOpsPuntenbeheer.Controllers
     [Route("[controller]")]
     public class IntakeProductenController : ControllerBase
     {
+        [HttpPut("{AccountID}")]
+        public IActionResult PointAdd(IntakeProducten subtract)
+        {
+            subtract.PointAdd(subtract.AccountID, subtract.Points);
+            return Ok();
+
+        }
     }
 }

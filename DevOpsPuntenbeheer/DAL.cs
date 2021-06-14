@@ -4,13 +4,13 @@ using System.Data.SqlClient;
 
 namespace DevOpsPuntenbeheer
 {
-    public class DAL
+    public static class DAL
     {
-        private readonly string connString = "Server=tcp:puntenbeheer.database.windows.net,1433;Initial Catalog=DevOpsPuntenbeheerDB;Persist Security Info=False;User ID=DevOpsPuntenbeheer;Password=99Siva'02;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+        private readonly static string connString = "Server=tcp:puntenbeheer.database.windows.net,1433;Initial Catalog=DevOpsPuntenbeheerDB;Persist Security Info=False;User ID=DevOpsPuntenbeheer;Password=99Siva'02;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+        private static SqlConnection conn = new SqlConnection(connString); 
 
-        public void AddAccount(int AccountID, int WalletID)
+        public static void AddAccount(int AccountID, int WalletID)
         {
-            using SqlConnection conn = new SqlConnection(connString);
             using SqlCommand cmd = new SqlCommand(connString);
             cmd.Connection = conn;
             cmd.CommandText = "INSERT INTO Accounts (AccountID, WalletID) VALUES (@AccountID, @WalletID)";
@@ -31,12 +31,10 @@ namespace DevOpsPuntenbeheer
             {
                 conn.Close();
             }
-
         }
 
-        public void AddWallet()
+        public static void AddWallet()
         {
-            using SqlConnection conn = new SqlConnection(connString);
             using SqlCommand cmd = new SqlCommand(connString);
             cmd.Connection = conn;
             cmd.CommandText = "INSERT INTO Wallets (WalletPoints) VALUES (@WalletPoints)";
@@ -59,9 +57,8 @@ namespace DevOpsPuntenbeheer
         }
 
 
-        public int GetLastWalletID(int WalletID)
+        public static int GetLastWalletID(int WalletID)
         {
-            using SqlConnection conn = new SqlConnection(connString);
             using SqlCommand cmd = new SqlCommand(connString);
             cmd.Connection = conn;
             cmd.CommandText = "SELECT * FROM Wallets WHERE WalletID=(SELECT max(WalletID) FROM Wallets)";
@@ -88,10 +85,9 @@ namespace DevOpsPuntenbeheer
         }
 
 
-        public int GetWalletID(int AccountID)
+        public static int GetWalletID(int AccountID)
         {
             int WalletID = new int();
-            using SqlConnection conn = new SqlConnection(connString);
             using SqlCommand cmd = new SqlCommand(connString);
             cmd.Connection = conn;
             cmd.CommandText = "SELECT * FROM Accounts WHERE AccountID = @AccountID";
@@ -116,9 +112,8 @@ namespace DevOpsPuntenbeheer
             return WalletID;
         }
 
-        public void DeleteWallet(int WalletID)
+        public static void DeleteWallet(int WalletID)
         {
-            using SqlConnection conn = new SqlConnection(connString);
             using SqlCommand cmd = new SqlCommand(connString);
             cmd.Connection = conn;
             cmd.CommandText = "DELETE FROM Wallets WHERE WalletID = @WalletID";
@@ -139,9 +134,8 @@ namespace DevOpsPuntenbeheer
             }
         }
 
-        public void DeleteAccount(int AccountID)
+        public static void DeleteAccount(int AccountID)
         {
-            using SqlConnection conn = new SqlConnection(connString);
             using SqlCommand cmd = new SqlCommand(connString);
             cmd.Connection = conn;
             cmd.CommandText = "DELETE FROM Accounts WHERE AccountID = @AccountID";
@@ -162,9 +156,8 @@ namespace DevOpsPuntenbeheer
             }
         }
 
-        public int GetWalletPoints(int WalletID)
+        public static int GetWalletPoints(int WalletID)
         {
-            using SqlConnection conn = new SqlConnection(connString);
             using SqlCommand cmd = new SqlCommand(connString);
             cmd.Connection = conn;
             cmd.CommandText = "SELECT * FROM Wallets WHERE WalletID = @WalletID";
@@ -191,9 +184,9 @@ namespace DevOpsPuntenbeheer
             return WalletID;
         }
 
-        public void UpdateWalletAccount(int NewWalletID, int AccountID)
+
+        public static void UpdateWalletAccount(int NewWalletID, int AccountID)
         {
-            using SqlConnection conn = new SqlConnection(connString);
             using SqlCommand cmd = new SqlCommand(connString);
             cmd.Connection = conn;
             cmd.CommandText = "UPDATE Accounts SET WalletID = @NewWalletID WHERE AccountID = @AccountID";
@@ -216,11 +209,79 @@ namespace DevOpsPuntenbeheer
 
         }
 
-        public bool? WalletIsConnected(int OldWalletID)
+        public static void AddWalletPoints(int WalletID, int add)
+        {
+            using SqlCommand cmd = new SqlCommand(connString);
+            cmd.Connection = conn;
+            cmd.CommandText = "UPDATE Wallets SET WalletPoints = WalletPoints + @Add WHERE WalletID = @WalletID";
+            cmd.Parameters.AddWithValue("@Add", add);
+            cmd.Parameters.AddWithValue("@WalletID", WalletID);
+            try
+            {
+                conn.Open();
+                cmd.ExecuteNonQuery();
+                Console.WriteLine("Wallet points added successfully.");
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine("Error Generated. Details: " + e.ToString());
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        public static void SubtractWalletPoints(int WalletID, int subtract)
+        {
+            using SqlCommand cmd = new SqlCommand(connString);
+            cmd.Connection = conn;
+            cmd.CommandText = "UPDATE Wallets SET WalletPoints = WalletPoints - @Subtract WHERE WalletID = @WalletID";
+            cmd.Parameters.AddWithValue("@Subtract", subtract);
+            cmd.Parameters.AddWithValue("@WalletID", WalletID);
+            try
+            {
+                conn.Open();
+                cmd.ExecuteNonQuery();
+                Console.WriteLine("Wallet points subtracted successfully.");
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine("Error Generated. Details: " + e.ToString());
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        public static void UpdateWalletPoints(int WalletID, int points)
+        {
+            using SqlCommand cmd = new SqlCommand(connString);
+            cmd.Connection = conn;
+            cmd.CommandText = "UPDATE Wallets SET WalletPoints = @Points WHERE WalletID = @WalletID";
+            cmd.Parameters.AddWithValue("@Points", points);
+            cmd.Parameters.AddWithValue("@WalletID", WalletID);
+            try
+            {
+                conn.Open();
+                cmd.ExecuteNonQuery();
+                Console.WriteLine("Wallet points subtracted successfully.");
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine("Error Generated. Details: " + e.ToString());
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        public static bool? WalletIsConnected(int OldWalletID)
         {
             bool? Connected = new bool();
             List<int> ConnectedAccounts= new List<int>();
-            using SqlConnection conn = new SqlConnection(connString);
             using SqlCommand cmd = new SqlCommand(connString);
             cmd.Connection = conn;
             cmd.CommandText = "SELECT * FROM Accounts WHERE EXISTS (SELECT * FROM Accounts WHERE WalletID = @OldWalletID )";
@@ -256,3 +317,4 @@ namespace DevOpsPuntenbeheer
         }
     }
 }
+
