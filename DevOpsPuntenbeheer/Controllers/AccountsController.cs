@@ -32,7 +32,7 @@ namespace DevOpsPuntenbeheer.Controllers
         public IActionResult GetWalletPoints(int AccountID)
         {
             Accounts accounts = new Accounts(0, 0);
-            int Walletpoints = accounts.GetWalletPoints(AccountID);
+            int? Walletpoints = accounts.GetWalletPoints(AccountID);
             return Ok(Walletpoints);
         }
 

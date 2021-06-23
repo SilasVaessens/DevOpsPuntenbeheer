@@ -315,6 +315,46 @@ namespace DevOpsPuntenbeheer
             }
             return Connected;
         }
+
+        public static bool? AccountExists(int AccountID)
+        {
+            bool? Exists = new bool();
+            List<int> ExistingAccounts = new List<int>();
+            using SqlCommand cmd = new SqlCommand(connString);
+            cmd.Connection = conn;
+            cmd.CommandText = "SELECT * FROM Accounts WHERE EXISTS (SELECT * FROM Accounts WHERE AccountID = @AccountID )";
+            cmd.Parameters.AddWithValue("@AccountID", AccountID);
+            try
+            {
+                conn.Open();
+                using SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    int Account_ID = (int)reader["AccountID"];
+                    ExistingAccounts.Add(Account_ID);
+                }
+                if (ExistingAccounts.Count > 0)
+                {
+                    Exists = true;
+                }
+                else
+                {
+                    Exists = false;
+                }
+            }
+            catch (SqlException e)
+            {
+
+                Console.WriteLine("Error Generated. Details: " + e.ToString());
+                Exists = null;
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return Exists;
+        }
     }
 }
 
