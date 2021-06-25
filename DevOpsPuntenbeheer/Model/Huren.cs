@@ -12,17 +12,31 @@ namespace DevOpsPuntenbeheer.Model
 
         public bool PointSubtract(int AccountID, int subtract)
         {
-            int walletID = DAL.GetWalletID(AccountID);
-            int walletpoints = DAL.GetWalletPoints(walletID);
-
-            if(subtract > walletpoints)
+            bool exists = DAL.AccountExists(AccountID);
+            if (exists == true)
             {
-                return false;
+                int? walletID = DAL.GetWalletID(AccountID);
+                if (walletID != null)
+                {
+                    int? walletpoints = DAL.GetWalletPoints((int)walletID);
+
+                    if (subtract > walletpoints)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return DAL.SubtractWalletPoints((int)walletID, subtract);
+                    }
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
-                DAL.SubtractWalletPoints(walletID, subtract);
-                return true;
+                return false;
             }
         }
     }

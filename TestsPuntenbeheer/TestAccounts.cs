@@ -1,4 +1,5 @@
 using DevOpsPuntenbeheer;
+using DevOpsPuntenbeheer.Model;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TestsPuntenbeheer
@@ -7,7 +8,7 @@ namespace TestsPuntenbeheer
     public class TestAccounts
     {
         [TestMethod]
-        public void TestMethod1()
+        public void TestAddAccountAndWallet()
         {
 
         }

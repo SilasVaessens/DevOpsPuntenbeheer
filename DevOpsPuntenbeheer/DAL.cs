@@ -7,10 +7,11 @@ namespace DevOpsPuntenbeheer
     public static class DAL
     {
         private readonly static string connString = "Server=tcp:puntenbeheer.database.windows.net,1433;Initial Catalog=DevOpsPuntenbeheerDB;Persist Security Info=False;User ID=DevOpsPuntenbeheer;Password=99Siva'02;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-        private static SqlConnection conn = new SqlConnection(connString); 
+        private readonly static SqlConnection conn = new SqlConnection(connString); 
 
-        public static void AddAccount(int AccountID, int WalletID)
+        public static bool AddAccount(int AccountID, int WalletID)
         {
+            bool Succes = new bool();
             using SqlCommand cmd = new SqlCommand(connString);
             cmd.Connection = conn;
             cmd.CommandText = "INSERT INTO Accounts (AccountID, WalletID) VALUES (@AccountID, @WalletID)";
@@ -21,20 +22,25 @@ namespace DevOpsPuntenbeheer
                 conn.Open();
                 cmd.ExecuteNonQuery();
                 Console.WriteLine("Account Inserted Successfully");
+                Succes = true;
 
             }
             catch (SqlException e)
             {
                 Console.WriteLine("Error Generated. Details: " + e.ToString());
+                Succes = false;
             }
             finally
             {
                 conn.Close();
             }
+            return Succes;
+            
         }
 
-        public static void AddWallet()
+        public static bool AddWallet()
         {
+            bool Succes = new bool();
             using SqlCommand cmd = new SqlCommand(connString);
             cmd.Connection = conn;
             cmd.CommandText = "INSERT INTO Wallets (WalletPoints) VALUES (@WalletPoints)";
@@ -44,21 +50,24 @@ namespace DevOpsPuntenbeheer
                 conn.Open();
                 cmd.ExecuteNonQuery();
                 Console.WriteLine("Wallet Inserted Successfully");
-
+                Succes = true;
             }
             catch (SqlException e)
             {
                 Console.WriteLine("Error Generated. Details: " + e.ToString());
+                Succes = false;
             }
             finally
             {
                 conn.Close();
             }
+            return Succes;
         }
 
 
-        public static int GetLastWalletID(int WalletID)
+        public static int? GetLastWalletID()
         {
+            int? WalletID = new int();
             using SqlCommand cmd = new SqlCommand(connString);
             cmd.Connection = conn;
             cmd.CommandText = "SELECT * FROM Wallets WHERE WalletID=(SELECT max(WalletID) FROM Wallets)";
@@ -68,14 +77,14 @@ namespace DevOpsPuntenbeheer
                 using SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    int Wallet = (int)reader["WalletID"];
-                    WalletID = Wallet;
+                    WalletID = (int)reader["WalletID"];
                 }
             }
             catch (SqlException e)
             {
 
                 Console.WriteLine("Error Generated. Details: " + e.ToString());
+                WalletID = null;
             }
             finally
             {
@@ -85,9 +94,9 @@ namespace DevOpsPuntenbeheer
         }
 
 
-        public static int GetWalletID(int AccountID)
+        public static int? GetWalletID(int AccountID)
         {
-            int WalletID = new int();
+            int? WalletID = new int();
             using SqlCommand cmd = new SqlCommand(connString);
             cmd.Connection = conn;
             cmd.CommandText = "SELECT * FROM Accounts WHERE AccountID = @AccountID";
@@ -104,6 +113,7 @@ namespace DevOpsPuntenbeheer
             catch (SqlException e)
             {
                 Console.WriteLine("Error Generated. Details: " + e.ToString());
+                WalletID = null;
             }
             finally
             {
@@ -112,8 +122,9 @@ namespace DevOpsPuntenbeheer
             return WalletID;
         }
 
-        public static void DeleteWallet(int WalletID)
+        public static bool DeleteWallet(int WalletID)
         {
+            bool Succes = new bool();
             using SqlCommand cmd = new SqlCommand(connString);
             cmd.Connection = conn;
             cmd.CommandText = "DELETE FROM Wallets WHERE WalletID = @WalletID";
@@ -123,19 +134,23 @@ namespace DevOpsPuntenbeheer
                 conn.Open();
                 cmd.ExecuteNonQuery();
                 Console.WriteLine("Wallet Deleted Successfully");
+                Succes = true;
             }
             catch (SqlException e)
             {
                 Console.WriteLine("Error Generated. Details: " + e.ToString());
+                Succes = false;
             }
             finally
             {
                 conn.Close();
             }
+            return Succes;
         }
 
-        public static void DeleteAccount(int AccountID)
+        public static bool DeleteAccount(int AccountID)
         {
+            bool Succes = new bool();
             using SqlCommand cmd = new SqlCommand(connString);
             cmd.Connection = conn;
             cmd.CommandText = "DELETE FROM Accounts WHERE AccountID = @AccountID";
@@ -145,19 +160,23 @@ namespace DevOpsPuntenbeheer
                 conn.Open();
                 cmd.ExecuteNonQuery();
                 Console.WriteLine("Account Deleted Succesfully");
+                Succes = true;
             }
             catch (SqlException e)
             {
                 Console.WriteLine("Error Generated. Details: " + e.ToString());
+                Succes = false;
             }
             finally
             {
                 conn.Close();
             }
+            return Succes;
         }
 
-        public static int GetWalletPoints(int WalletID)
+        public static int? GetWalletPoints(int WalletID)
         {
+            int? WalletPoints = new int();
             using SqlCommand cmd = new SqlCommand(connString);
             cmd.Connection = conn;
             cmd.CommandText = "SELECT * FROM Wallets WHERE WalletID = @WalletID";
@@ -168,20 +187,20 @@ namespace DevOpsPuntenbeheer
                 using SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    int Wallet = (int)reader["WalletPoints"];
-                    WalletID = Wallet;
+                    WalletPoints = (int)reader["WalletPoints"];
                 }
             }
             catch (SqlException e)
             {
 
                 Console.WriteLine("Error Generated. Details: " + e.ToString());
+                WalletPoints = null;
             }
             finally
             {
                 conn.Close();
             }
-            return WalletID;
+            return WalletPoints;
         }
 
 
@@ -209,8 +228,9 @@ namespace DevOpsPuntenbeheer
 
         }
 
-        public static void AddWalletPoints(int WalletID, int add)
+        public static bool AddWalletPoints(int WalletID, int add)
         {
+            bool Succes = new bool();
             using SqlCommand cmd = new SqlCommand(connString);
             cmd.Connection = conn;
             cmd.CommandText = "UPDATE Wallets SET WalletPoints = WalletPoints + @Add WHERE WalletID = @WalletID";
@@ -221,19 +241,23 @@ namespace DevOpsPuntenbeheer
                 conn.Open();
                 cmd.ExecuteNonQuery();
                 Console.WriteLine("Wallet points added successfully.");
+                Succes = true;
             }
             catch (SqlException e)
             {
                 Console.WriteLine("Error Generated. Details: " + e.ToString());
+                Succes = false;
             }
             finally
             {
                 conn.Close();
             }
+            return Succes;
         }
 
-        public static void SubtractWalletPoints(int WalletID, int subtract)
+        public static bool SubtractWalletPoints(int WalletID, int subtract)
         {
+            bool Succes = new bool();
             using SqlCommand cmd = new SqlCommand(connString);
             cmd.Connection = conn;
             cmd.CommandText = "UPDATE Wallets SET WalletPoints = WalletPoints - @Subtract WHERE WalletID = @WalletID";
@@ -244,15 +268,18 @@ namespace DevOpsPuntenbeheer
                 conn.Open();
                 cmd.ExecuteNonQuery();
                 Console.WriteLine("Wallet points subtracted successfully.");
+                Succes = true;
             }
             catch (SqlException e)
             {
                 Console.WriteLine("Error Generated. Details: " + e.ToString());
+                Succes = false;
             }
             finally
             {
                 conn.Close();
             }
+            return Succes;
         }
 
         public static void UpdateWalletPoints(int WalletID, int points)
@@ -316,9 +343,9 @@ namespace DevOpsPuntenbeheer
             return Connected;
         }
 
-        public static bool? AccountExists(int AccountID)
+        public static bool AccountExists(int AccountID)
         {
-            bool? Exists = new bool();
+            bool Exists = new bool();
             List<int> ExistingAccounts = new List<int>();
             using SqlCommand cmd = new SqlCommand(connString);
             cmd.Connection = conn;
@@ -346,7 +373,7 @@ namespace DevOpsPuntenbeheer
             {
 
                 Console.WriteLine("Error Generated. Details: " + e.ToString());
-                Exists = null;
+                Exists = false;
             }
             finally
             {
@@ -355,6 +382,35 @@ namespace DevOpsPuntenbeheer
 
             return Exists;
         }
+
+        public static int? GetLastAccountID()
+        {
+            int? AccountID = new int();
+            using SqlCommand cmd = new SqlCommand(connString);
+            cmd.Connection = conn;
+            cmd.CommandText = "SELECT * FROM Accounts WHERE AccountID=(SELECT max(AccountID) FROM Accounts)";
+            try
+            {
+                conn.Open();
+                using SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    AccountID = (int)reader["AccountID"];
+                }
+            }
+            catch (SqlException e)
+            {
+
+                Console.WriteLine("Error Generated. Details: " + e.ToString());
+                AccountID = null;
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return AccountID;
+        }
+
     }
 }
 

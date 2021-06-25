@@ -16,16 +16,30 @@ namespace DevOpsPuntenbeheer.Controllers
         [HttpPost]
         public IActionResult AddAccount (Accounts accounts)
         {
-            accounts.AddAccounts(accounts);
-            return Ok();
+            bool Succes = accounts.AddAccounts(accounts);
+            if (Succes == true)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [HttpDelete("{AccountID}")]
         public IActionResult DeleteAccount (int AccountID)
         {
             Accounts accounts = new Accounts(0, 0);
-            accounts.DeleteAccounts(AccountID);
-            return Ok();
+            bool Succes = accounts.DeleteAccounts(AccountID);
+            if (Succes == true)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [HttpGet("{AccountID}")]
@@ -33,14 +47,28 @@ namespace DevOpsPuntenbeheer.Controllers
         {
             Accounts accounts = new Accounts(0, 0);
             int? Walletpoints = accounts.GetWalletPoints(AccountID);
-            return Ok(Walletpoints);
+            if (Walletpoints == null)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                return Ok(Walletpoints);
+            }
         }
 
         [HttpPut("{AccountID}")]
         public IActionResult ChangeWallet(Accounts accounts)
         {
-            accounts.ChangeWallet(accounts);
-            return Ok();
+            bool Succes = accounts.ChangeWallet(accounts);
+            if (Succes == true)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
     }
 }

@@ -10,10 +10,25 @@ namespace DevOpsPuntenbeheer.Model
         public int AccountID { get; set; }
         public int Points { get; set; }
 
-        public void PointAdd(int AccountID, int add)
+        public bool PointAdd(int AccountID, int add)
         {
-            int walletID = DAL.GetWalletID(AccountID);
-            DAL.AddWalletPoints(walletID, add);
+            bool exists = DAL.AccountExists(AccountID);
+            if (exists == true)
+            {
+                int? walletID = DAL.GetWalletID(AccountID);
+                if (walletID != null)
+                {
+                    return DAL.AddWalletPoints((int)walletID, add);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
      }
 }
