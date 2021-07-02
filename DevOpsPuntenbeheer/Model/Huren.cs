@@ -20,7 +20,7 @@ namespace DevOpsPuntenbeheer.Model
                 {
                     int? walletpoints = DAL.GetWalletPoints((int)walletID);
 
-                    if (subtract > walletpoints)
+                    if (subtract > walletpoints || subtract < 0)
                     {
                         return false;
                     }

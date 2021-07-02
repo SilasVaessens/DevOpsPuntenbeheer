@@ -12,9 +12,9 @@ namespace DevOpsPuntenbeheer.Controllers
     public class IntakeProductenController : ControllerBase
     {
         [HttpPut("{AccountID}")]
-        public IActionResult PointAdd(IntakeProducten subtract)
+        public IActionResult PointAdd(IntakeProducten add)
         {
-            bool Succes = subtract.PointAdd(subtract.AccountID, subtract.Points);
+            bool Succes = add.PointAdd(add.AccountID, add.Points);
             if (Succes == true)
             {
                 return Ok();
