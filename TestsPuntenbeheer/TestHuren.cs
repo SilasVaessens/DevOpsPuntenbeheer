@@ -19,8 +19,8 @@ namespace TestsPuntenbeheer
             }
             else
             {
-                Huren Huur = new Huren();
-                Huur.PointSubtract((int)LastWalletID, 100);
+                IntakeProducten Intake = new IntakeProducten();
+                Intake.PointAdd(TestAccount.AccountID, 100);
                 int? InitialWalletPoints = DAL.GetWalletPoints((int)LastWalletID);
                 if (InitialWalletPoints == null)
                 {
@@ -30,7 +30,7 @@ namespace TestsPuntenbeheer
                 {
                     Assert.AreEqual(100, InitialWalletPoints);
                     Huren huren = new Huren();
-                    huren.PointSubtract(1000, 100);
+                    huren.PointSubtract(TestAccount.AccountID, 100);
                     int? NewWalletPoints = DAL.GetWalletPoints((int)LastWalletID);
                     if (NewWalletPoints == null)
                     {
@@ -38,7 +38,7 @@ namespace TestsPuntenbeheer
                     }
                     else
                     {
-                        Assert.AreEqual(100, NewWalletPoints);
+                        Assert.AreEqual(0, NewWalletPoints);
                         TestAccount.DeleteAccounts(1000);
                     }
 
