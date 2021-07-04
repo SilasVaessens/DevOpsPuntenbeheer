@@ -282,7 +282,7 @@ namespace DevOpsPuntenbeheer
             return Succes;
         }
 
-        public static void UpdateWalletPoints(int WalletID, int points)
+        public static void UpdateWalletPoints(int WalletID, int points) // not really needed, but is used for testing
         {
             using SqlCommand cmd = new SqlCommand(connString);
             cmd.Connection = conn;
@@ -383,7 +383,7 @@ namespace DevOpsPuntenbeheer
             return Exists;
         }
 
-        public static int? GetLastAccountID()
+        public static int? GetLastAccountID() // for testing only
         {
             int? AccountID = new int();
             using SqlCommand cmd = new SqlCommand(connString);

@@ -19,7 +19,6 @@ namespace DevOpsPuntenbeheer.Model
         public bool AddAccounts(Accounts accounts)
         {
             bool Exists = DAL.AccountExists(accounts.AccountID);
-            bool Succes = false;
             if (Exists == false)
             {
                 bool SuccesWallet = DAL.AddWallet();
@@ -28,29 +27,27 @@ namespace DevOpsPuntenbeheer.Model
                     int? wallet = DAL.GetLastWalletID();
                     if (wallet != null)
                     {
-                        Succes = DAL.AddAccount(accounts.AccountID, (int)wallet);
-                        return Succes;
+                        return DAL.AddAccount(accounts.AccountID, (int)wallet);
                     }
                     else
                     {
-                        return Succes;
+                        return false;
                     }
                 }
                 else
                 {
-                    return Succes;
+                    return false;
                 }
             }
             else
             {
-                return Succes;
+                return false;
             }
         }
 
         public bool DeleteAccounts(int AccountID)
         {
             bool Exists = DAL.AccountExists(AccountID);
-            bool Succes = false;
             if (Exists == true)
             {
                 int? wallet = DAL.GetWalletID(AccountID);
@@ -59,22 +56,21 @@ namespace DevOpsPuntenbeheer.Model
                     bool SuccesWallet = DAL.DeleteWallet((int)wallet);
                     if (SuccesWallet == true)
                     {
-                        Succes = DAL.DeleteAccount(AccountID);
-                        return Succes;
+                        return DAL.DeleteAccount(AccountID);
                     }
                     else
                     {
-                        return Succes;
+                        return false;
                     }
                 }
                 else
                 {
-                    return Succes;
+                    return false;
                 }
             }
             else
             {
-                return Succes;
+                return false;
             }
         }
 
@@ -101,7 +97,6 @@ namespace DevOpsPuntenbeheer.Model
 
         public bool ChangeWallet(Accounts accounts)
         {
-            bool Succes = false;
             bool Exists = DAL.AccountExists(accounts.AccountID);
             if (Exists == true)
             {
@@ -111,13 +106,13 @@ namespace DevOpsPuntenbeheer.Model
                     if (accounts.WalletID > 0) // wijzigen naar bestaande wallet
                     {
                         int? TransferWalletID = DAL.GetWalletID(accounts.WalletID);
-                        if (TransferWalletID != null)
+                        if (TransferWalletID != null || wallet != TransferWalletID)
                         {
                             DAL.UpdateWalletAccount((int)TransferWalletID, accounts.AccountID);
                         }
                         else
                         {
-                            return Succes;
+                            return false;
                         }
                     }
                     else // wijzigen naar nieuwe wallet
@@ -132,34 +127,32 @@ namespace DevOpsPuntenbeheer.Model
                             }
                             else
                             {
-                                return Succes;
+                                return false;
                             }
                         }
                         else
                         {
-                            return Succes;
+                            return false;
                         }
                     }
 
                     if (DAL.WalletIsConnected((int)wallet) == false) // controleer of oude wallet gekoppeld is aan andere accounts
                     {
-                        Succes = DAL.DeleteWallet((int)wallet); // verwijder oude wallet als het niet gekoppeld is aan ander account
-                        return Succes;
+                        return DAL.DeleteWallet((int)wallet); // verwijder oude wallet als het niet gekoppeld is aan ander account
                     }
                     else
                     {
-                        Succes = true;
-                        return Succes;
+                        return true;
                     }
                 }
                 else
                 {
-                    return Succes;
+                    return false;
                 }
             }
             else
             {
-                return Succes;
+                return false;
             }
         }
 
