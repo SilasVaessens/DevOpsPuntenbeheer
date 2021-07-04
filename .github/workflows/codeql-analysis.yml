@@ -22,6 +22,7 @@ jobs:
   analyze:
     name: Analyze
     runs-on: windows-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     permissions:
       actions: read
       contents: read
