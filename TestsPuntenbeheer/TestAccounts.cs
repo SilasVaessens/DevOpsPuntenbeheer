@@ -76,7 +76,8 @@ namespace TestsPuntenbeheer
             {
                 Assert.AreEqual(0, NewWalletPoints);
 
-                DAL.UpdateWalletPoints(TestAccount.AccountID, 100);
+                IntakeProducten Intake = new IntakeProducten();
+                Intake.PointAdd(TestAccount.AccountID, 100);
                 int? UpdatedWalletPoints = TestAccount.GetWalletPoints(TestAccount.AccountID);
                 if (UpdatedWalletPoints == null)
                 {
@@ -111,7 +112,8 @@ namespace TestsPuntenbeheer
                 Assert.AreEqual(0, Account1Points);
                 Assert.AreEqual(0, Account2Points);
 
-                DAL.UpdateWalletPoints(TestAccount2.AccountID, 100);
+                IntakeProducten Intake = new IntakeProducten();
+                Intake.PointAdd(TestAccount2.AccountID, 100);
 
                 TestAccount1.ChangeWallet(new Accounts(TestAccount1.AccountID, TestAccount2.AccountID));
                 Account1Points = TestAccount1.GetWalletPoints(TestAccount1.AccountID);

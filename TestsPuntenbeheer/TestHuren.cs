@@ -19,7 +19,8 @@ namespace TestsPuntenbeheer
             }
             else
             {
-                DAL.UpdateWalletPoints((int)LastWalletID, 100);
+                Huren Huur = new Huren();
+                Huur.PointSubtract((int)LastWalletID, 100);
                 int? InitialWalletPoints = DAL.GetWalletPoints((int)LastWalletID);
                 if (InitialWalletPoints == null)
                 {

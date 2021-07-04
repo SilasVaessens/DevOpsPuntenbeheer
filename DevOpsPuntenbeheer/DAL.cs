@@ -282,29 +282,6 @@ namespace DevOpsPuntenbeheer
             return Succes;
         }
 
-        public static void UpdateWalletPoints(int WalletID, int points) // not really needed, but is used for testing
-        {
-            using SqlCommand cmd = new SqlCommand(connString);
-            cmd.Connection = conn;
-            cmd.CommandText = "UPDATE Wallets SET WalletPoints = @Points WHERE WalletID = @WalletID";
-            cmd.Parameters.AddWithValue("@Points", points);
-            cmd.Parameters.AddWithValue("@WalletID", WalletID);
-            try
-            {
-                conn.Open();
-                cmd.ExecuteNonQuery();
-                Console.WriteLine("Wallet points subtracted successfully.");
-            }
-            catch (SqlException e)
-            {
-                Console.WriteLine("Error Generated. Details: " + e.ToString());
-            }
-            finally
-            {
-                conn.Close();
-            }
-        }
-
         public static bool? WalletIsConnected(int OldWalletID)
         {
             bool? Connected = new bool();
